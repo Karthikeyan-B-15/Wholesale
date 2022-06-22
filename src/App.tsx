@@ -1,24 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Form from './Form';
+import {retailerData}from './RetailerData'
+import Retailer from './Retailer';
+import { Provider } from 'react-redux';
+ import {store} from './store';
 
-function App() {
+
+
+
+function App(){
+  const [dis,setDis]=useState<any>({id:0,check:false})
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className='header'>
+      <h2>Wholesale shop</h2>
+      <div className='btn-container'>
+     <button onClick={()=>setDis({id:1,check:!dis.check})}>Retailer 1</button>
+     <button onClick={()=>setDis({id:2,check:!dis.check})}>Retailer 2</button>
+     <button onClick={()=>setDis({id:3,check:!dis.check})}>Retailer 3</button>
+     </div>
+     </div>
+     <Provider store={store}>
+     {dis.check&&<Form num={dis.id} close={setDis}/>}
+     {retailerData.map((data)=>{
+         return <Retailer data={data.rname} val={data.val}/>
+     })}
+     </Provider>
     </div>
   );
 }
