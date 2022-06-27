@@ -1,29 +1,41 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import  ReactDOM  from 'react-dom'
 import './App.css'
 import App from './App'
-import { useAppDispatch, useAppSelector } from './hooks'
+import {  useAppSelector ,useAppDispatch} from './hooks'
 import { handleText } from './silce'
 import { retailerData } from './RetailerData'
 import { Dialog,Button , DialogContent, DialogContentText, DialogTitle,DialogProps } from '@mui/material'
 import ProductTable from './ProductTable'
 
-function Form(props:any) {
-    const dispatch=useAppDispatch()
-    const value=useAppSelector(state=>state.text.inputText)
 
-    // dispatch(handleText({inptext}))
-    const handleClick=(e:any)=>{
-        
+function Form(props:any) {
+    const [check,setCheck]=useState(false)
+    const [toggle, setToggle] = useState(true);
+    
+    const value=useAppSelector(state=>state.text.inputText)
+    console.log("first value", value)
+  
+      // console.log(ind)
       
+      // setToggle(!toggle);
+      
+    
+    
+  
+    const handleClick=(ind:any)=>{
+       
+      // setToggle(!toggle);
+      console.log("val", value)
+        console.log(value.map((val)=>val))
+            
         
-        console.log(value)
-        retailerData.map((data)=>{
-          if(data.id===props.num){
-            data.val=value
-            console.log(data.val)
-          }
-        })
+    retailerData.map((data)=>{
+      if(data.id===props.num){
+        value.map((val)=>data.val.push(val))
+        console.log(data.val)
+      }
+    })
 
         props.close(false)
         
@@ -33,13 +45,13 @@ function Form(props:any) {
    
   return ReactDOM.createPortal( 
   <div className='form'>
-    <Dialog open={props.close}>
+    <Dialog open >
       <DialogTitle>Form</DialogTitle>
       <DialogContent>
-        <ProductTable/>
+        <ProductTable handleClick={handleClick}/>
       </DialogContent>
       
-      <Button onClick={handleClick}>submit</Button>
+      
     </Dialog>
   
     </div>,document.body)

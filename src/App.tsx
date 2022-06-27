@@ -6,6 +6,7 @@ import {retailerData}from './RetailerData'
 import Retailer from './Retailer';
 import { Provider } from 'react-redux';
  import {store} from './store';
+import './retail.css'
 
 
 
@@ -25,9 +26,11 @@ function App(){
      </div>
      <Provider store={store}>
      {dis.check&&<Form num={dis.id} close={setDis}/>}
+     <div className='retailer'>
      {retailerData.map((data)=>{
-         return <Retailer data={data.rname} val={data.val}/>
+         return <Retailer key={data.id} data={data.rname} val={data.val}/>
      })}
+     </div>
      </Provider>
     </div>
   );

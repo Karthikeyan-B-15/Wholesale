@@ -1,54 +1,82 @@
 import { Table } from '@material-ui/core'
 import { MenuItem, Select, TableBody, TableCell, TableContainer, TableHead, TableRow,Button,TextField } from '@mui/material'
-import { setUncaughtExceptionCaptureCallback } from 'process';
 import React, { useState } from 'react'
 import { ProductData } from './ProductData';
 import './table.css'
-let num=1
-function ProductTable() {
+import { useAppDispatch} from './hooks'
+import { handleText } from './silce'
+import { iteratorSymbol } from 'immer/dist/internal';
+import { validateLocaleAndSetLanguage } from 'typescript';
+let add:any=0
+let temp:any=0
+function ProductTable({handleClick}:any) {
+    
+    
+    const dispatch=useAppDispatch()
     const [check,setCheck]=useState(false)
-    const [product,setProduct]=useState("Milk Bikis")
     const [nums,setNums]=useState(0)
-
-    let [ind,setInd]=useState<any>([{id:0,prod:"Milk Bikis",qty:nums}])
-    console.log(product)
-    
+    const [product,setProduct]=useState("Milk Bikis")
+    let [ind,setInd]=useState<any>([{id:0,prod:"Milk Bikis",qty:nums,amt:0}])
+    dispatch(handleText({ind}))
     const handleProduct=(e:any,index:number,id:any)=>{
-        
-            if(id===index){
-                setProduct(ind[id].prod=e.target.value)
-        
-                
-                console.log(ind[id].prod)
-                
-            }
             
-     
         
+                // if(id===index){
+                    // let newarr=[...ind]
+                    // newarr[index].prod=e.target.value
+                    // setInd(newarr)
+                    setInd(
+                        ind.map((item:any) => 
+                            item.id === index 
+                            ? {...item, prod: e.target.value} 
+                            : item 
+                    ))
+                // }
+                setCheck(ps=>!ps)
+                console.log(ind)
+            add=0
     }
-    const handleNumber=(e:any,index:number,id:any)=>{
-        if(id===index){
-        setNums(ind[id].qty=e.target.value)
-        }
-    }
-    const handleRemove=()=>{
-        
-    }
-    
-    console.log(ind)
-    const handleAddClick = () =>{
 
-    setInd((prevArr:any)=>(
-        [...prevArr,
-        {id:num,prod:"Milk Bikis",qty:0}]
-    )
-    )
+    const handleNumber=(e:any,index:number,id:any)=>{
+        
+        // if(id===index){
+        // add=0
+        // setNums(e.target.value)
+        // }
     
+            
     
-    // setProduct("Milk Bikis")
-    num++
+        ind.map((item:any)=>{
+        
+ProductData.map((val:any)=>val.product===item.prod?temp=val.price*item.qty:"")
+console.log(temp)
+      })
+      
+      
+        setInd(
+            ind.map((item:any) => (
+                item.id === index ? {...item, amt:temp}: item 
+    
+             ) ))
+    
     }
     
+    const handleRemove=(e:any,index:number)=>{
+        add=0
+        setInd(()=>(ind.filter( (val:any)=>val.prod!==ind[index].prod)))
+    }
+    
+    
+        const handleAddClick = () =>{
+
+                setInd((prevArr:any)=>(
+                    [...prevArr,
+                    {id:prevArr[prevArr.length-1].id+1,prod:"Milk Bikis",qty:0,amt:0}]
+                ))
+                 add=0
+                 
+        }
+        
   return (
     <div className="table">
         <TableContainer>
@@ -70,28 +98,23 @@ function ProductTable() {
             <TableRow key={data.id}>
             <TableCell>
             
-            <Select value={data.prod} onChange={(e)=>handleProduct(e,index,data.id)}>
+            <Select value={data.prod} onChange={(e)=>handleProduct(e,index,ind.map((obj:any)=>obj.id).indexOf(data.id))}>
                 {ProductData.map((data)=>(
                 <MenuItem value={data.product} key={data.id}>{data.product}</MenuItem>
                 ))}
-               
-               
         </Select>
          </TableCell>
            <TableCell>
             <TextField  type="number" value={data.qty} inputProps={{min:0,max:50}} onChange={(e:any)=>handleNumber(e,index,data.id)}/>
-           
             </TableCell>
             <TableCell>{ProductData.map((val)=>{
-                return val.product===data.prod?val.price:""
-            })}
+               return  val.product===data.prod?val.price:""
+      })}
             </TableCell>
             <TableCell>
-            {ProductData.map((val)=>{
-                return val.product===data.prod?val.price*data.qty:""
-            })}
+       {ind[index].amt}
             </TableCell>
-            <TableCell><Button onClick={handleRemove}>DEL</Button></TableCell>
+            <TableCell><Button onClick={(e)=>handleRemove(e,index)}>DEL</Button></TableCell>
            </TableRow>
         )
       }) }
@@ -99,10 +122,13 @@ function ProductTable() {
                 </TableBody>
             </Table>
         </TableContainer>
+        Toatal Amount:{ind.forEach((item:number,index:number)=>add+=ind[index].amt)}{add}
         <Button onClick={handleAddClick}>Add</Button>
-
+        <Button onClick={e=>handleClick(ind)}>Submit</Button>
+        
     </div>
   )
+  
 }
 
 export default ProductTable

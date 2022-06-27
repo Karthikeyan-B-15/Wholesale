@@ -3,20 +3,21 @@ import type { RootState } from './store'
 
 
 interface State{
-    inputText:string,
+    inputText:any,
 }
 export const wholeSlice=createSlice({
     name: "wholesale",
     initialState:{
-        inputText:""
+        inputText:[]
     },
     reducers:{
         handleText:(state,action:PayloadAction<any>)=>{
-            state.inputText=action.payload.inptext
+        
+            state.inputText=action.payload.ind
         }
     }
 })
 export const  {handleText}=wholeSlice.actions
-// export const selectInp = (state: RootState) => state.text.inputText
+export const selectInp = (state: RootState) => state.text.inputText
 
 export default wholeSlice.reducer
