@@ -1,75 +1,46 @@
 import { Table } from '@material-ui/core'
 import { MenuItem, Select, TableBody, TableCell, TableContainer, TableHead, TableRow,Button,TextField } from '@mui/material'
-import React, { useState } from 'react'
+import React, {  useState } from 'react'
 import { ProductData } from './ProductData';
 import './table.css'
 import { useAppDispatch} from './hooks'
 import { handleText } from './silce'
-import { iteratorSymbol } from 'immer/dist/internal';
-import { validateLocaleAndSetLanguage } from 'typescript';
 let add:any=0
 let temp:any=0
 function ProductTable({handleClick}:any) {
-    
-    
     const dispatch=useAppDispatch()
     const [check,setCheck]=useState(false)
     const [nums,setNums]=useState(0)
-    const [product,setProduct]=useState("Milk Bikis")
     let [ind,setInd]=useState<any>([{id:0,prod:"Milk Bikis",qty:nums,amt:0}])
     dispatch(handleText({ind}))
+    console.log(nums)
     const handleProduct=(e:any,index:number,id:any)=>{
-            
-        
-                // if(id===index){
-                    // let newarr=[...ind]
-                    // newarr[index].prod=e.target.value
-                    // setInd(newarr)
                     setInd(
                         ind.map((item:any) => 
                             item.id === index 
                             ? {...item, prod: e.target.value} 
                             : item 
                     ))
-                // }
-                setCheck(ps=>!ps)
-                console.log(ind)
-            add=0
+                     setCheck(ps=>!ps)
+                     add=0
     }
-
+    ind.map((item:any)=>{ProductData.map((val:any)=>val.product===item.prod?temp=(val.price*item.qty+val.price):"")})
     const handleNumber=(e:any,index:number,id:any)=>{
-        
-        // if(id===index){
-        // add=0
-        // setNums(e.target.value)
-        // }
-    
-            
-    
-        ind.map((item:any)=>{
-        
-ProductData.map((val:any)=>val.product===item.prod?temp=val.price*item.qty:"")
-console.log(temp)
-      })
-      
-      
+        if(id===index){
+        add=0
         setInd(
-            ind.map((item:any) => (
-                item.id === index ? {...item, amt:temp}: item 
-    
-             ) ))
-    
+            ind.map((item:any) => 
+                item.id === index 
+                ? {...item, qty: e.target.value,amt:temp} 
+                : item 
+        ))}
     }
-    
     const handleRemove=(e:any,index:number)=>{
         add=0
         setInd(()=>(ind.filter( (val:any)=>val.prod!==ind[index].prod)))
     }
-    
-    
-        const handleAddClick = () =>{
-
-                setInd((prevArr:any)=>(
+    const handleAddClick = () =>{
+        setInd((prevArr:any)=>(
                     [...prevArr,
                     {id:prevArr[prevArr.length-1].id+1,prod:"Milk Bikis",qty:0,amt:0}]
                 ))
@@ -122,7 +93,7 @@ console.log(temp)
                 </TableBody>
             </Table>
         </TableContainer>
-        Toatal Amount:{ind.forEach((item:number,index:number)=>add+=ind[index].amt)}{add}
+        Toatal Amount:{ind.forEach((item:number,index:number)=>add+=ind[index].amt)}{add/2}
         <Button onClick={handleAddClick}>Add</Button>
         <Button onClick={e=>handleClick(ind)}>Submit</Button>
         
