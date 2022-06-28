@@ -17,20 +17,26 @@ function ProductTable({handleClick}:any) {
     const handleProduct=(e:any,index:number,id:any)=>{
                     setInd(
                         ind.map((item:any) => 
-                            item.id === index 
+                    
+                          ind.indexOf(item) === index 
                             ? {...item, prod: e.target.value} 
                             : item 
                     ))
                      setCheck(ps=>!ps)
                      add=0
     }
-    ind.map((item:any)=>{ProductData.map((val:any)=>val.product===item.prod?temp=(val.price*item.qty+val.price):"")})
+    console.log(ind)
+   function setAmount(index:any){
+    ind.map((item:any)=>{ProductData.map((val:any)=>ind.indexOf(item)===index?val.product===item.prod?temp=(val.price*item.qty+val.price):"":"")})
+   }
+    console.log(temp)
     const handleNumber=(e:any,index:number,id:any)=>{
+        setAmount(index)
         if(id===index){
         add=0
         setInd(
             ind.map((item:any) => 
-                item.id === index 
+                ind.indexOf(item) === index 
                 ? {...item, qty: e.target.value,amt:temp} 
                 : item 
         ))}
@@ -40,11 +46,12 @@ function ProductTable({handleClick}:any) {
         setInd(()=>(ind.filter( (val:any)=>val.prod!==ind[index].prod)))
     }
     const handleAddClick = () =>{
+        add=0
         setInd((prevArr:any)=>(
                     [...prevArr,
                     {id:prevArr[prevArr.length-1].id+1,prod:"Milk Bikis",qty:0,amt:0}]
                 ))
-                 add=0
+                 
                  
         }
         
