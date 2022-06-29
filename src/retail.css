@@ -1,12 +1,70 @@
 .retailer{
     display: flex;
-    width: 100%;
-    height: 86vh;
-    border: .5px solid rgba(0,0,0,0.2);
+    justify-content: space-around;
+    align-items: center;
+    height:91.20vh ;
+    background: #bd4848;
+    color: #fff;
 
-    /* align-content: center; */
-    justify-content: center;
+    
 }
 .view{
     flex-direction: column;
+    height: 70vh;
+    max-width: 70vh;
+    width:18vw;
+    max-width: 18vw;
+    padding:20px;
+    position:absolute;
+    background: #EB5757;  
+    background: -webkit-linear-gradient(to top, #000000, #EB5757); 
+    background: linear-gradient(to top, #000000, #EB5757);
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.9) 0px 7px 29px 0px;
+    
+    
+}
+.view .ta{
+    margin-top: -50px;
+}
+
+.view .thead{
+    position:absolute;
+    left: 15%;
+}
+.view .tbody{
+    position: absolute;
+    top:25%;
+    overflow: scroll;
+    max-height: 52vh;
+    left: 15%;
+}
+.view p{
+    position: absolute;
+    bottom: 0;
+    left:25%;
+}
+.view h3{
+    position:relative;
+    top:-70px;
+    left: 27%;
+    background-color: #b33e3e;
+    width: 30%;
+    padding: 20px;
+    height: 70px;
+    border-radius: 50%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+::-webkit-scrollbar{
+    width: 4px;
+}
+::-webkit-scrollbar-thumb{
+    border-radius: 10px;
+    background: #aaa;
+}
+::-webkit-scrollbar-thumb:hover{
+    border-radius: 10px;
+    background: #777;
 }

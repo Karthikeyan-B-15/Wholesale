@@ -1,5 +1,10 @@
 export const ProductData=[
     {
+        id:0,
+        product:"select",
+        price:0
+    },
+    {
         id:1,
         product:"Milk Bikis",
         price:30

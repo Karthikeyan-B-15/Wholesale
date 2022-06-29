@@ -15,7 +15,9 @@
   align-items: center;
   justify-content: space-between;
   position: relative;
+  background: #eb6666;
   box-shadow: rgba(33, 35, 38, 0.3) 0px 10px 10px -10px;
+  color: #fff;
 }
 .header h2{
   position: relative;
@@ -31,5 +33,20 @@
   padding: 8px;
   border-radius: 5px;
   border: none;
-  background-color: rgb(171, 206, 235);
+  background-color:#c05555;
+  color:#fff;
+  cursor: pointer;
+  font-weight: 700;
+}
+.title{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.title button{
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: 300;
 }

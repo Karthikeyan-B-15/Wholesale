@@ -11,15 +11,21 @@ function Form(props:any) {
     retailerData.map((data)=>{
       if(data.id===props.num){
         value.map((val)=>data.val.push(val))
-        console.log(data.val)
       }
     })
-        props.close(false)
+     if(ind.every((val:any)=>val.qty>0)){
+      props.close(false)
+    }
+     else{
+      alert("Warn")
+      retailerData.map((data:any)=>data.val=[])
+    }
+    
     }
   return ReactDOM.createPortal( 
   <div className='form'>
     <Dialog open >
-      <DialogTitle>Form</DialogTitle>
+      <DialogTitle><div className='title'><h2>Form</h2><button onClick={()=>props.close(false)}>X</button></div></DialogTitle>
       <DialogContent>
         <ProductTable handleClick={handleClick}/>
       </DialogContent>
