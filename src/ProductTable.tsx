@@ -1,18 +1,26 @@
-import { Table } from '@material-ui/core'
-import { MenuItem, Select, TableBody, TableCell, TableContainer, TableHead, TableRow,Button,TextField,} from '@mui/material'
+import { DialogContent, DialogTitle, Table } from '@material-ui/core'
+import { MenuItem, Select, TableBody, TableCell, TableContainer, TableHead, TableRow,Button,TextField, Dialog,} from '@mui/material'
 import React, { useState } from 'react'
 import { ProductData } from './ProductData';
 import './table.css'
 import { useAppDispatch} from './hooks'
 import { handleText } from './silce'
+import { retailerData } from './RetailerData';
 
 
 let add:any=0
 
-
-let arr=ProductData.map((val:any)=>val)
-function ProductTable({handleClick}:any) {
+let arr:any;
+function ProductTable({handleClick,num}:any) {
+    retailerData.map((data:any,index:number)=>{
+            if(data.id===num){
+                console.log(data.val)   
+                data.val.length===0?arr=ProductData.map((val:any)=>val):data.val.map((val:any)=>arr=arr.filter((item:any)=>item.product!==val.prod))
+                console.log(arr)
+            }
+        })
     const dispatch=useAppDispatch()
+    const [check,setCheck]=useState(false)
     const [nums,setNums]=useState(0)
     const [ind,setInd]=useState<any|JSX.Element|JSX.Element[]>([{id:0,prod:arr[0].product,price:arr[0].price,qty:nums,amt:0}])
     dispatch(handleText({ind}))
@@ -23,9 +31,11 @@ function ProductTable({handleClick}:any) {
                     ))
                 }
                     else{
-                        alert("Already Exit This Item")
+                        // alert("Already Exit This Item")
+                        setCheck(!check)
                         e.target.value="select"
                         setInd(ind.map((item:any) => ind.indexOf(item) === index? {...item, prod: e.target.value} : item))
+                        
 
                     
                   }})
@@ -35,13 +45,14 @@ function ProductTable({handleClick}:any) {
         if(id===i){
             setInd(
             ind.map((item:any,index:number) => 
-                ind.indexOf(item) === i
-                ?  {...item, qty: e.target.value,price:arr[index+1].price,amt:e.target.value*arr[index+1].price} 
+                item.id === i
+                ?  {...item, qty: e.target.value,price:arr[index+1].price,amt:arr.filter((val:any)=>item.prod===val.product)[0].price*e.target.value} 
                 : item
                 )
         )}add=0  
 
     }
+    console.log(ind)
      const handleRemove=(e:any,index:number)=>{
         add=0
         setInd(()=>(ind.filter( (val:any)=>val.prod!==ind[index].prod)))
@@ -73,9 +84,9 @@ function ProductTable({handleClick}:any) {
             <TableRow key={data.id}>
                 <TableCell>
                     <Select value={data.prod} onChange={(e)=>handleProduct(e,index,ind.map((obj:any)=>obj.id).indexOf(data.id))}>
-                        {ProductData.map((val)=>(
-                    <MenuItem value={val.product} key={val.id}>{val.product}</MenuItem>
-                        ))}
+                        {
+                        arr.map((val:any)=>(<MenuItem value={val.product} key={val.id}>{val.product}</MenuItem>))
+                        }
                     </Select>
                 </TableCell>
                 <TableCell>
@@ -97,8 +108,12 @@ function ProductTable({handleClick}:any) {
 </TableContainer>
         Total Amount:{ind.forEach((item:number,index:number)=>add+=ind[index].amt)}{add/2}
         <Button onClick={handleAddClick}>Add</Button>
-        <Button onClick={e=>handleClick(ind)}>Submit</Button>
-        
+        <Button onClick={e=>handleClick(ind,arr)}>Submit</Button>
+        <Dialog open={check}>
+            <DialogTitle>Warn</DialogTitle>
+            <DialogContent>Already Exits this product in cart</DialogContent>
+            <Button onClick={()=>setCheck(!check)}>OK</Button>
+        </Dialog>
     </div>
   )
   
