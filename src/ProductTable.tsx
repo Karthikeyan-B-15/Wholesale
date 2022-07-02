@@ -6,11 +6,8 @@ import './table.css'
 import { useAppDispatch} from './hooks'
 import { handleText } from './silce'
 import { retailerData } from './RetailerData';
-
-
 let add:any=0
-
-let arr:any;
+let arr:any=ProductData.map((val:any)=>val)
 function ProductTable({handleClick,num}:any) {
     retailerData.map((data:any,index:number)=>{
             if(data.id===num){
@@ -22,7 +19,7 @@ function ProductTable({handleClick,num}:any) {
     const dispatch=useAppDispatch()
     const [check,setCheck]=useState(false)
     const [nums,setNums]=useState(0)
-    const [ind,setInd]=useState<any|JSX.Element|JSX.Element[]>([{id:0,prod:arr[0].product,price:arr[0].price,qty:nums,amt:0}])
+    const [ind,setInd]=useState<any|JSX.Element|JSX.Element[]>([{id:0,prod:arr[0].product,price:arr[0].price,qty:nums,amt:0,array:arr,toggle:false}])
     dispatch(handleText({ind}))
     const handleProduct=(e:any,index:number,id:any)=>{
                 ind.map((data:any)=>{
@@ -31,38 +28,50 @@ function ProductTable({handleClick,num}:any) {
                     ))
                 }
                     else{
-                        // alert("Already Exit This Item")
                         setCheck(!check)
                         e.target.value="select"
-                        setInd(ind.map((item:any) => ind.indexOf(item) === index? {...item, prod: e.target.value} : item))
-                        
-
-                    
+                        setInd(ind.map((item:any) => ind.indexOf(item) === index? {...item, prod: e.target.value} : item)) 
                   }})
           add=0
     }
     const handleNumber=(e:any,i:number,id:any)=>{
+        let temp:any;
         if(id===i){
+            console.log(ind)
+            ind.map((item:any)=>ind.indexOf(item)===i?temp=arr.filter((val:any)=>item.prod===val.product):item)
+            console.log(temp[0]) 
+            console.log(i)
             setInd(
             ind.map((item:any,index:number) => 
                 item.id === i
-                ?  {...item, qty: e.target.value,price:arr[index+1].price,amt:arr.filter((val:any)=>item.prod===val.product)[0].price*e.target.value} 
+                ?  {...item, qty:temp[0].product!=="select"? e.target.value:0,price:arr[index+1].price,amt:temp[0].price*e.target.value} 
                 : item
                 )
         )}add=0  
-
     }
     console.log(ind)
      const handleRemove=(e:any,index:number)=>{
         add=0
+        if(ind.length>1){
         setInd(()=>(ind.filter( (val:any)=>val.prod!==ind[index].prod)))
+        }
     }
     const handleAddClick = () =>{
         add=0
-        setInd((prevArr:any)=>(
-                    [...prevArr,
-                    {id:prevArr[prevArr.length-1].id+1,prod:arr[0].product,qty:0,price:0,amt:0}]
-                ))         
+         if(ind[ind.length-1].qty!==0){
+                        ind.map((item:any)=>item.prod!=="select"?arr=arr.filter((val:any)=>item.prod!==val.product):item)
+            setInd((prevArr:any)=>(
+                [...prevArr,
+                {id:prevArr[prevArr.length-1].id+1,prod:arr[0].product,qty:0,price:0,amt:0,array:arr,toggle:false}]
+            ))
+                }
+        else{
+            setInd(ind.map((item:any,index:number) => ind.indexOf(item) === index? {...item, toggle:true} : item))
+        }        
+        }
+        const handleInput=(e:any)=>{
+            e.target.value=Math.abs(e.target.value)
+            e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,2)
         }
   return (
     <div className="table">
@@ -81,23 +90,25 @@ function ProductTable({handleClick,num}:any) {
                 <TableBody>      
                 {ind&&ind.map((data:any,index:number)=>{
             return(
-            <TableRow key={data.id}>
+            <TableRow key={data.id} sx={{alignContent:"center"}}>
                 <TableCell>
                     <Select value={data.prod} onChange={(e)=>handleProduct(e,index,ind.map((obj:any)=>obj.id).indexOf(data.id))}>
                         {
-                        arr.map((val:any)=>(<MenuItem value={val.product} key={val.id}>{val.product}</MenuItem>))
+                        data.array.map((val:any)=>(<MenuItem value={val.product} key={val.id}>{val.product}</MenuItem>))
                         }
                     </Select>
                 </TableCell>
-                <TableCell>
-                    <TextField  type="number" value={data.qty} inputProps={{min:0,max:50}} onChange={(e:any)=>{handleNumber(e,index,data.id)}} />
+                <TableCell>{
+                  data.toggle?  <TextField error={data.qty===0?true:false} label={data.qty===0?"*Empty Qty":""}  type="number" value={data.qty} onInput={handleInput}  inputProps={{min:0,max:50,maxLength:2}} onChange={(e:any)=>{handleNumber(e,index,data.id)}} />
+                  :<TextField   type="number" value={data.qty} inputProps={{min:0,max:50,maxLength:2}} onChange={(e:any)=>{handleNumber(e,index,data.id)}} onInput={handleInput}  />
+                }
                 </TableCell>
-                <TableCell>{ProductData.map((val:any)=>{
+                <TableCell><p>{ProductData.map((val:any)=>{
                return  val.product===data.prod?val.price:""
-                })}
+                })}</p>
                 </TableCell>
                 <TableCell>
-                {ind[index].amt}
+                <p>{ind[index].amt}</p>
                 </TableCell>
                 <TableCell><Button onClick={(e:any)=>handleRemove(e,index)}>DEL</Button></TableCell>
            </TableRow>
@@ -106,18 +117,16 @@ function ProductTable({handleClick,num}:any) {
       </TableBody>
      </Table>
 </TableContainer>
-        Total Amount:{ind.forEach((item:number,index:number)=>add+=ind[index].amt)}{add/2}
+        Total Amount{" "}:{" "}{ind.forEach((item:number,index:number)=>add+=ind[index].amt)}{add/2}
         <Button onClick={handleAddClick}>Add</Button>
-        <Button onClick={e=>handleClick(ind,arr)}>Submit</Button>
+        <Button onClick={e=>handleClick(ind,arr,setInd)}>Submit</Button>
         <Dialog open={check}>
             <DialogTitle>Warn</DialogTitle>
             <DialogContent>Already Exits this product in cart</DialogContent>
             <Button onClick={()=>setCheck(!check)}>OK</Button>
         </Dialog>
     </div>
-  )
-  
+  ) 
 }
-
 export default ProductTable
 

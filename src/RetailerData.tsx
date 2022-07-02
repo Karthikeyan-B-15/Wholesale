@@ -13,6 +13,6 @@ export const retailerData=[
     {
         id:3,
         rname:"Retailer3",
-           val:[]
-    }
+        val:[]
+    },
 ]
