@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import './retail.css'
 import EditIcon from '@mui/icons-material/Edit';
 import { ProductData } from './ProductData';
+import { BorderBottom } from '@mui/icons-material';
 let arr:any=ProductData.map((val:any)=>val)
 function Retailer(props:any) {
   let add:any=0
@@ -36,7 +37,7 @@ function Retailer(props:any) {
       <TableContainer >
         <Table>
           <div className='thead'>
-          <TableHead><TableRow>
+          <TableHead ><TableRow >
             <TableCell>Product</TableCell>
             <TableCell>Qty</TableCell>
             <TableCell>Amount</TableCell>
