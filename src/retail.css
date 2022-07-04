@@ -6,9 +6,16 @@
     background: #5ccbf3b7;
   
 }
+.total{
+        position: absolute;
+        bottom: .5%;
+        font-size: 2rem;
+        font-weight: bold;
+
+}
 .view{
     flex-direction: column;
-    height: 70vh;
+    height: 60vh;
     max-width: 70vh;
     width:18vw;
     max-width: 18vw;
@@ -25,15 +32,15 @@
 }
 .view .thead{
     position:absolute;
-    left: 8%;
+    left: 7%;
     /* border-bottom: 1px solid #000 !important; */
 }
 .view .tbody{
     position: absolute;
     top:25%;
     overflow-y: scroll;
-    max-height: 52vh;
-    left: 8%;
+    max-height: 40vh;
+    left: 7%;
 }
 .view .text{
     position: absolute;

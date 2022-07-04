@@ -12,7 +12,7 @@ import './retail.css'
 
 function App(){
   const [dis,setDis]=useState<any>({id:0,check:false})
-  
+  let add:any=0
   return (
     <div className="App">
       <div className='header'>
@@ -29,8 +29,10 @@ function App(){
      {retailerData.map((data)=>{
          return <Retailer key={data.id} data={data.rname} val={data.val}/>
      })}
+     <p className='total'>{retailerData.map((data:any)=>{data.val.forEach((item:number,index:number)=>add+=data.val[index].amt)})}Total Amount{" "}:{" "}{add}</p>
      </div>
      </Provider>
+     
     </div>
   );
 }

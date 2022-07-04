@@ -122,7 +122,7 @@ function ProductTable({handleClick,num}:any) {
         Total Amount{" "}:{" "}{ind.forEach((item:number,index:number)=>add+=ind[index].amt)}{add}
         <Button onClick={handleAddClick}>Add</Button>
         <Button onClick={e=>handleClick(ind,arr,setInd,add)}>Submit</Button>
-
+        
     </div>
   ) 
 }
