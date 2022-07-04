@@ -9,7 +9,8 @@ import CloseIcon from '@mui/icons-material/Close';
 function Form(props:any) {
     const value=useAppSelector(state=>state.text.inputText)
     const [check,setCheck]=useState(false)
-    const handleClick=(ind:any,arr:any,setInd:any)=>{    
+    const handleClick=(ind:any,arr:any,setInd:any,add:any)=>{    
+     
      if(ind.every((val:any)=>val.qty>0)){
       retailerData.map((data)=>{
         if(data.id===props.num){
@@ -21,6 +22,7 @@ function Form(props:any) {
       props.close(false)
     }
      else{
+      add=0
       setInd(ind.map((item:any,index:number) => ind.indexOf(item) === index? {...item, toggle:true} : item))
     }
     }

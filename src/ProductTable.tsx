@@ -6,9 +6,10 @@ import './table.css'
 import { useAppDispatch} from './hooks'
 import { handleText } from './silce'
 import { retailerData } from './RetailerData';
-let add:any=0
+
 let arr:any=ProductData.map((val:any)=>val)
 function ProductTable({handleClick,num}:any) {
+    let add:any=0
     retailerData.map((data:any,index:number)=>{
             if(data.id===num){
                 console.log(data.val)   
@@ -44,7 +45,7 @@ function ProductTable({handleClick,num}:any) {
             setInd(
             ind.map((item:any,index:number) => 
                 item.id === i
-                ?  {...item, qty:temp[0].product!=="select"? e.target.value:0,price:arr[index+1].price,amt:temp[0].price*e.target.value} 
+                ?  {...item, qty:temp[0].product!=="select"? e.target.value:0,price:arr[index+1].price,amt:temp[0].price*e.target.value,toggle:true} 
                 : item
                 )
         )}add=0  
@@ -58,7 +59,7 @@ function ProductTable({handleClick,num}:any) {
     }
     const handleAddClick = () =>{
         add=0
-         if(ind[ind.length-1].qty!==0){
+         if(ind.every((val:any)=>val.qty>0)){
                         ind.map((item:any)=>item.prod!=="select"?arr=arr.filter((val:any)=>item.prod!==val.product):item)
             setInd((prevArr:any)=>(
                 [...prevArr,
@@ -73,6 +74,7 @@ function ProductTable({handleClick,num}:any) {
             e.target.value=Math.abs(e.target.value)
             e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,2)
         }
+        console.log(ind)
   return (
     <div className="table">
         <TableContainer >
@@ -99,7 +101,7 @@ function ProductTable({handleClick,num}:any) {
                     </Select>
                 </TableCell>
                 <TableCell>{
-                  data.toggle?  <TextField error={data.qty===0?true:false} label={data.qty===0?"*Empty Qty":""}  type="number" value={data.qty} onInput={handleInput}  inputProps={{min:0,max:50,maxLength:2}} onChange={(e:any)=>{handleNumber(e,index,data.id)}} />
+                  data.toggle?  <TextField error={data.qty==0?true:false} label={data.qty==0?"*Empty Qty":""}  type="number" value={data.qty} onInput={handleInput}  inputProps={{min:0,max:50,maxLength:2}} onChange={(e:any)=>{handleNumber(e,index,data.id)}} />
                   :<TextField   type="number" value={data.qty} inputProps={{min:0,max:50,maxLength:2}} onChange={(e:any)=>{handleNumber(e,index,data.id)}} onInput={handleInput}  />
                 }
                 </TableCell>
@@ -117,14 +119,10 @@ function ProductTable({handleClick,num}:any) {
       </TableBody>
      </Table>
 </TableContainer>
-        Total Amount{" "}:{" "}{ind.forEach((item:number,index:number)=>add+=ind[index].amt)}{add/2}
+        Total Amount{" "}:{" "}{ind.forEach((item:number,index:number)=>add+=ind[index].amt)}{add}
         <Button onClick={handleAddClick}>Add</Button>
-        <Button onClick={e=>handleClick(ind,arr,setInd)}>Submit</Button>
-        <Dialog open={check}>
-            <DialogTitle>Warn</DialogTitle>
-            <DialogContent>Already Exits this product in cart</DialogContent>
-            <Button onClick={()=>setCheck(!check)}>OK</Button>
-        </Dialog>
+        <Button onClick={e=>handleClick(ind,arr,setInd,add)}>Submit</Button>
+
     </div>
   ) 
 }
